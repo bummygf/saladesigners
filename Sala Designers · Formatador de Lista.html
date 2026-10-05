@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sala Designers · Formatador de Lista</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sedgwick+Ave+Display&family=Permanent+Marker&display=swap">
+<style>
+:root{--wall:#cfcdc6;--ink:#111;--card:#fffdf4;--txt:#161616;--mute:#555;--field:#fffef9;--y:#ffd900;--m:#ff2e88;--c:#00c8e6;--g:#4be000;
+--hand:"Permanent Marker","Marker Felt","Comic Sans MS",Impact,sans-serif;--tag:"Sedgwick Ave Display","Permanent Marker","Brush Script MT",Impact,sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--wall:#1b1c1f;--card:#26272c;--txt:#f2f2ee;--mute:#a9a9a2;--field:#16171a}}
+:root[data-theme="dark"]{--wall:#1b1c1f;--card:#26272c;--txt:#f2f2ee;--mute:#a9a9a2;--field:#16171a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;color:var(--txt);font:16px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif;background-color:var(--wall);
+background-image:repeating-linear-gradient(0deg,transparent 0 38px,rgba(0,0,0,.16) 38px 40px),
+repeating-linear-gradient(90deg,transparent 0 78px,rgba(0,0,0,.14) 78px 80px),
+radial-gradient(circle at 20% 10%,rgba(255,46,136,.18),transparent 40%),radial-gradient(circle at 85% 90%,rgba(0,200,230,.18),transparent 40%)}
+.wrap{max-width:980px;margin:0 auto;padding:18px 16px 56px}
+.logo{text-align:center;margin:0 0 22px;user-select:none}
+.art{width:100%;max-width:700px;height:auto;display:block;margin:0 auto;transform:rotate(-1.5deg);filter:drop-shadow(0 6px 0 rgba(0,0,0,.35));overflow:visible}
+.art text{font-family:"Sedgwick Ave Display","Permanent Marker","Brush Script MT",Impact,sans-serif}
+.tagline{display:inline-block;margin-top:12px;font-family:var(--hand);font-size:1rem;background:var(--g);color:#000;padding:2px 12px;border:3px solid #000;box-shadow:3px 3px 0 #000;transform:rotate(1deg)}
+.bar{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin:0 0 16px;padding:12px 14px;background:var(--card);border:3px solid #000;border-radius:6px;box-shadow:6px 6px 0 #000}
+.bar label{display:flex;gap:8px;align-items:center;cursor:pointer;font-family:var(--hand);font-size:1.02rem}
+.bar input{width:22px;height:22px;accent-color:var(--m)}
+.sp{flex:1}
+button{font-family:var(--hand);font-size:1rem;border:3px solid #000;background:var(--y);color:#000;border-radius:6px;padding:8px 14px;cursor:pointer;box-shadow:3px 3px 0 #000;transition:transform .08s,box-shadow .08s}
+button:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 #000}
+button:active{transform:translate(3px,3px);box-shadow:0 0 0 #000}
+button.p{background:var(--m);color:#fff}
+button.q{background:var(--c)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:3px solid #000;border-radius:6px;padding:14px;box-shadow:6px 6px 0 #000}
+.card:nth-child(1){transform:rotate(-.5deg)}.card:nth-child(2){transform:rotate(.5deg)}
+@media(max-width:760px){.card:nth-child(n){transform:none}}
+h2{font-family:var(--hand);font-weight:400;font-size:1.2rem;margin:0 0 8px;display:inline-block;background:var(--y);color:#000;padding:0 10px;border:2px solid #000;transform:rotate(-1.5deg)}
+.card:nth-child(2) h2{background:var(--c)}
+textarea{width:100%;height:340px;resize:vertical;border:3px dashed #000;border-radius:4px;padding:10px;background:var(--field);color:var(--txt);font:15px/1.6 ui-monospace,Consolas,monospace}
+textarea:focus,button:focus-visible{outline:4px solid var(--m);outline-offset:2px}
+.info{font-family:var(--hand);color:var(--mute);font-size:.95rem;margin-top:8px;min-height:1.5em}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) rotate(-1deg);background:var(--g);color:#000;font-family:var(--hand);padding:8px 18px;border:3px solid #000;box-shadow:4px 4px 0 #000;opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.on{opacity:1}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="logo" aria-label="Sala Designers">
+<svg class="art" viewBox="0 0 760 340" role="img" aria-label="Sala Designers">
+<defs>
+<linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff35c"/><stop offset=".5" stop-color="#ffa21a"/><stop offset="1" stop-color="#ff3b2e"/></linearGradient>
+<linearGradient id="g2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a6ffff"/><stop offset=".55" stop-color="#00c6dc"/><stop offset="1" stop-color="#0a74c9"/></linearGradient>
+<symbol id="st" viewBox="0 0 100 100"><polygon points="50,4 61,38 97,38 68,59 79,94 50,73 21,94 32,59 3,38 39,38" fill="#ffe94d" stroke="#000" stroke-width="7" stroke-linejoin="round"/></symbol>
+</defs>
+<g stroke="#000" stroke-width="4" stroke-linejoin="round">
+<path d="M30 120c-20-50 40-95 120-90 70-12 190-20 260 10 40 20 20 90-30 100-60 20-290 30-330-20z" fill="#ff2e88" opacity=".92"/>
+<path d="M400 40c60-30 180-20 250 10 60 30 30 90-40 100-70 20-180 10-215-40-15-25-10-55 5-70z" fill="#a24bff" opacity=".9"/>
+<path d="M90 190c60-20 220-20 330 5 120 20 250 0 290 40 25 40-30 80-110 80-120 10-380 20-470-10-60-30-80-90-40-115z" fill="#ffe94d" opacity=".95"/>
+<path d="M120 215c80-12 300-5 420 10 80 12 90 60 30 80-90 25-380 18-450-5-50-20-50-75 0-85z" fill="#00d4e8" opacity=".9"/>
+</g>
+<g stroke="#000" stroke-width="3.5"><rect x="70" y="148" width="11" height="38" rx="5.5" fill="#ff9d1a"/><rect x="150" y="148" width="11" height="22" rx="5.5" fill="#ffe94d"/><rect x="238" y="148" width="11" height="48" rx="5.5" fill="#ff5a2e"/><rect x="330" y="148" width="11" height="28" rx="5.5" fill="#ffe94d"/><rect x="420" y="148" width="11" height="40" rx="5.5" fill="#ff9d1a"/><rect x="150" y="262" width="11" height="30" rx="5.5" fill="#00d4e8"/><rect x="255" y="262" width="11" height="46" rx="5.5" fill="#6bff3b"/><rect x="375" y="262" width="11" height="24" rx="5.5" fill="#00d4e8"/><rect x="480" y="262" width="11" height="52" rx="5.5" fill="#00d4e8"/><rect x="590" y="262" width="11" height="30" rx="5.5" fill="#6bff3b"/><rect x="650" y="262" width="11" height="42" rx="5.5" fill="#ff2e88"/></g>
+<g font-size="170">
+<text x="70" y="156" textLength="380" lengthAdjust="spacingAndGlyphs" fill="#ff2e88" stroke="#000" stroke-width="16" stroke-linejoin="round" transform="translate(9 9)">SALA</text>
+<text x="70" y="156" textLength="380" lengthAdjust="spacingAndGlyphs" fill="#000" stroke="#000" stroke-width="16" stroke-linejoin="round">SALA</text>
+<text x="70" y="156" textLength="380" lengthAdjust="spacingAndGlyphs" fill="url(#g1)">SALA</text>
+</g>
+<g font-size="100">
+<text x="110" y="272" textLength="560" lengthAdjust="spacingAndGlyphs" fill="#a24bff" stroke="#000" stroke-width="13" stroke-linejoin="round" transform="translate(7 7)">DESIGNERS</text>
+<text x="110" y="272" textLength="560" lengthAdjust="spacingAndGlyphs" fill="#000" stroke="#000" stroke-width="13" stroke-linejoin="round">DESIGNERS</text>
+<text x="110" y="272" textLength="560" lengthAdjust="spacingAndGlyphs" fill="url(#g2)">DESIGNERS</text>
+</g>
+<g stroke="#fff" stroke-width="5" stroke-linecap="round" fill="none" opacity=".9"><path d="M96 70l22-6"/><path d="M190 62l20-4"/><path d="M290 66l18-4"/><path d="M130 222l30-4"/><path d="M330 222l26-4"/></g>
+<polygon points="378,30 386,6 400,22 414,2 426,22 440,8 448,32" fill="#ffe94d" stroke="#000" stroke-width="5" stroke-linejoin="round"/>
+<use href="#st" x="30" y="40" width="46" height="46"/><use href="#st" x="690" y="170" width="40" height="40"/><use href="#st" x="470" y="150" width="30" height="30"/><use href="#st" x="640" y="12" width="36" height="36"/>
+<g stroke="#000" stroke-width="5" stroke-linejoin="round">
+<circle cx="38" cy="290" r="26" fill="#1a1a1a"/><path d="M52 270l16-18" fill="none"/><path d="M72 244l6 12 12 2-9 8 3 12-12-6-11 6 3-12-9-8 12-2z" fill="#ffe94d" stroke-width="3"/>
+<g fill="#fff" stroke="none"><circle cx="38" cy="290" r="19"/></g><g stroke-width="4" stroke-linecap="round"><path d="M28 281l8 8m0-8l-8 8"/><path d="M42 281l8 8m0-8l-8 8"/><path d="M30 299q8 6 16 0" fill="none"/></g>
+<rect x="676" y="82" width="46" height="70" rx="10" fill="#ff7a1a"/><rect x="684" y="62" width="30" height="22" rx="5" fill="#ddd"/><rect x="694" y="46" width="10" height="18" rx="3" fill="#333"/>
+<g fill="#fff" stroke="none"><circle cx="690" cy="110" r="6"/><circle cx="710" cy="110" r="6"/></g><circle cx="690" cy="110" r="2.5" fill="#000" stroke="none"/><circle cx="710" cy="110" r="2.5" fill="#000" stroke="none"/><path d="M688 128q12 10 24 0" fill="none" stroke-width="4"/>
+</g>
+<g fill="#00d4e8" stroke="#000" stroke-width="2"><circle cx="652" cy="60" r="5"/><circle cx="640" cy="78" r="4"/><circle cx="660" cy="86" r="3"/><circle cx="648" cy="40" r="3"/></g>
+</svg>
+<span class="tagline">formatador de lista</span>
+</header>
+<div class="bar">
+<label><input type="checkbox" id="short"> Short</label>
+<label><input type="checkbox" id="sort"> A–Z</label>
+<label><input type="checkbox" id="dup"> Sem repetidos</label>
+<span class="sp"></span>
+<button class="q" id="fmt">Formatar</button>
+<button id="clr">Limpar</button>
+<button class="p" id="cp">Copiar</button>
+</div>
+<div class="grid">
+<div class="card"><h2>Cole a lista</h2><textarea id="in" spellcheck="false" placeholder="joão 10 G&#10;maria (M) #12&#10;gustavo N:7 TM: 8 anos"></textarea></div>
+<div class="card"><h2>Resultado</h2><textarea id="out" readonly spellcheck="false"></textarea><div class="info" id="info"></div></div>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+/*CORE*/
+var SIZE=/^(A\d{1,2}|ESPECIAL|ESP|XXXG|XXG|XG|EXGG|EXG|XGG|GGGG|GGG|GG|G|M|P|PP|XXS|XS|S|L|XL|XXL|XXXL|G1|G2|G3|G4|EGG|EG|XP)$/i;
+var WORDS={PEQUENO:'P',MEDIO:'M',GRANDE:'G'};
+var SIZE_LAB=/(^|[^\p{L}\p{N}])(?:TAMANHO|TAM|TMH|TM|SIZE)\.?\s*[:=]?\s*(?:([\p{L}\p{N}]{1,8})(?![\p{L}\p{N}])(?!\s*[:=]))?/giu;
+var NUM_LAB=/(^|[^\p{L}\p{N}])(?:(?:NUMERO|NÚMERO|NUM|NRO|NR|N)\.?\s*[:=]|N[º°]\.?|NUM(?:ERO)?\.?|NÚMERO)\s*(\d{1,4})?(?![\p{L}\p{N}])/giu;
+var NOISE=/(^|[^\p{L}\p{N}])(?:NOME|CAMISA|CAMISETA)(?![\p{L}\p{N}])\s*[:=]?/giu;
+var EDGE=/^[\s\-–—\/,;:|.'!?]+|[\s\-–—\/,;:|'!?]+$/g;
+function clean(s){
+  return String(s).normalize('NFC')
+    .replace(/[\u200B-\u200D\u2060\uFEFF\u00AD\uFE0F\u20E3]/g,'')
+    .replace(/[\u00A0\u2007\u202F]/g,' ')
+    .replace(/\r/g,'');
+}
+function noAcc(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').normalize('NFC')}
+function asSize(v){
+  v=String(v).trim();
+  if(SIZE.test(v))return v.toLocaleUpperCase('pt-BR');
+  return WORDS[noAcc(v).toUpperCase()]||'';
+}
+function dropStray(s){
+  var st=[],bad={},i,c;
+  for(i=0;i<s.length;i++){c=s[i];
+    if(c==='('||c==='[')st.push(i);
+    else if(c===')'||c===']'){
+      if(st.length&&((s[st[st.length-1]]==='(')===(c===')')))st.pop();else bad[i]=1;
+    }
+  }
+  st.forEach(function(k){bad[k]=1});
+  var o='';for(i=0;i<s.length;i++)o+=bad[i]?' ':s[i];
+  return o;
+}
+function formatLine(raw,short){
+  var line=clean(raw).replace(/°/g,'º');
+  // limpeza: emojis, símbolos, aspas, pontuação decorativa
+  line=line.replace(/[\p{Extended_Pictographic}\p{So}\p{Sc}]/gu,' ')
+    .replace(/[“”"`´‘’«»{}<>\\^=*~_]/g,' ')
+    .replace(/\.{2,}|…|[-–—]{2,}/g,' ')
+    .replace(/(^|[^\p{L}])'+|'+(?![\p{L}])/gu,'$1 ');
+  line=line.replace(/^[\s•·▪►>\-–—]+/,'').replace(/^\d{1,3}\s*[.)]\s+/,'');
+  line=line.replace(/(\p{L})-(\d)/gu,'$1 $2').replace(/(\d)-(\p{L})/gu,'$1 $2');
+  line=line.replace(NOISE,'$1 ');
+  // idade: "4 anos", "8anos", "6a" -> A4, A8, A6
+  line=line.replace(/(^|[^\p{L}\p{N}])(\d{1,2})\s*anos?(?![\p{L}\p{N}])/giu,'$1A$2 ');
+  line=line.replace(/(^|[^\p{L}\p{N}])(\d{1,2})a(?![\p{L}\p{N}])/giu,'$1A$2 ');
+  var num='',size='';
+  line=line.replace(/#\s*(\d{1,4})(?!\d)/g,function(m,d){if(!num)num=d;return ' ';});
+  line=line.replace(/[(\[]\s*([^()\[\]]*?)\s*[)\]]/g,function(m,c){
+    var z=SIZE.test(c)?asSize(c):'';
+    if(z)return ' '+z+' ';
+    if(/^\d{1,3}$/.test(c))return ' '+c+' ';
+    return m;
+  });
+  line=dropStray(line);
+  line=line.replace(SIZE_LAB,function(m,pre,val){
+    var z=val?asSize(val):'';
+    if(z){if(!size)size=z;return pre+' ';}
+    if(val&&/^\d{1,2}$/.test(val)){if(!size)size='A'+val;return pre+' ';}
+    return pre+' '+(val||'')+' ';
+  });
+  line=line.replace(NUM_LAB,function(m,pre,d){if(d&&!num)num=d;return pre+' ';});
+  var toks=line.split(/[\s,;|\/:=]+/).map(function(t){
+    return t.replace(/^[.,;:'~\-_\]\[\/\\!?]+|[.,;:'~\-_\]\[\/\\!?]+$/g,'').replace(/^(\d{1,3})[º°]$/,'$1');
+  }).filter(Boolean);
+  var numI=-1,sizeI=-1,i;
+  if(!num){for(i=0;i<toks.length;i++){if(/^\d{1,3}$/.test(toks[i])){numI=i;break}}}
+  if(!size){for(i=toks.length-1;i>=0;i--){if(i!==numI&&SIZE.test(toks[i])){sizeI=i;break}}}
+  if(numI>-1)num=toks[numI];
+  if(sizeI>-1)size=toks[sizeI];
+  var name=[];
+  toks.forEach(function(t,k){if(k!==numI&&k!==sizeI)name.push(t)});
+  if(!size){
+    for(i=0;i<name.length;i++){
+      var pm=name[i].match(/^[(\[]([\p{L}]+)[)\]]$/u);
+      if(pm&&WORDS[noAcc(pm[1]).toUpperCase()]){size=WORDS[noAcc(pm[1]).toUpperCase()];name.splice(i,1);break}
+    }
+  }
+  var n=name.join(' ').replace(/(\p{L}{2,})\.(?=\s|$)/gu,'$1').replace(/^\(+([^()]*)\)+$/,'$1').replace(EDGE,'').replace(/\s+/g,' ').toLocaleUpperCase('pt-BR');
+  size=size.toLocaleUpperCase('pt-BR');
+  if(size==='ESPECIAL')size='ESP';
+  if(!n&&!num&&!size)return null;
+  var f=[n,num,size];
+  if(short)f.push(size);
+  var out='';
+  f.forEach(function(v,k){if(k===0)out+=v;else out+=v?', '+v:','});
+  return{text:out,name:n,missing:!n||!num||!size};
+}
+function formatAll(text,short,opt){
+  opt=opt||{};
+  var rows=[],seen={},miss=0;
+  clean(text).split('\n').forEach(function(l){
+    var r=formatLine(l,short);
+    if(!r)return;
+    if(opt.dup){if(seen[r.text])return;seen[r.text]=1}
+    rows.push(r);
+  });
+  if(opt.sort){
+    rows=rows.map(function(r,i){r.i=i;return r}).sort(function(a,b){
+      if(!a.name!==!b.name)return a.name?-1:1;
+      return a.name.localeCompare(b.name,'pt-BR')||a.i-b.i;
+    });
+  }
+  rows.forEach(function(r){if(r.missing)miss++});
+  return{text:rows.map(function(r){return r.text}).join('\n'),count:rows.length,miss:miss};
+}
+/*END*/
+function $(i){return document.getElementById(i)}
+function run(){
+  var r=formatAll($('in').value,$('short').checked,{sort:$('sort').checked,dup:$('dup').checked});
+  $('out').value=r.text;
+  $('info').textContent=r.count?(r.count+(r.count===1?' linha':' linhas')+(r.miss?' · '+r.miss+' com campo vazio (vírgula repetida)':'')):'';
+}
+function toast(t){var e=$('toast');e.textContent=t;e.classList.add('on');setTimeout(function(){e.classList.remove('on')},1800)}
+function copy(){
+  run();
+  var t=$('out').value;if(!t){toast('Nada para copiar');return}
+  function fb(){var a=$('out');a.removeAttribute('readonly');a.focus();a.select();var ok=false;try{ok=document.execCommand('copy')}catch(e){}a.setAttribute('readonly','');toast(ok?'Copiado!':'Selecione e copie manualmente')}
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(function(){toast('Copiado!')},fb)}else fb();
+}
+['input','paste','change','keyup'].forEach(function(ev){$('in').addEventListener(ev,function(){setTimeout(run,0)})});
+['short','sort','dup'].forEach(function(i){$(i).addEventListener('change',run)});
+$('fmt').addEventListener('click',run);
+$('cp').addEventListener('click',copy);
+$('clr').addEventListener('click',function(){$('in').value='';run();$('in').focus()});
+run();
+</script>
+</body>
+</html>
